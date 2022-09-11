@@ -108,6 +108,10 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                         -D sonar.projectKey=${sonarKey} \
                         -D sonar.projectName=${sonarProjectName} \
                         -D sonar.projectVersion=${sonarVersion} \
+                        -D sonar.sources=. \
+                        -D sonar.sourceEncoding=UTF-8 \
+                        -D sonar.exclusions=*/node-modules/**,/coverage/lcov-report/* \
+                        -D sonar.javascript.lcov.reportPaths=coverage/lcov.info
                     """
 
                 }
