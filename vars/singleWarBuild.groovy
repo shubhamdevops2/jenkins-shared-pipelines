@@ -121,7 +121,7 @@ def call(body){
                         "files": [
                             {
                             "pattern": "nodejs-usermanagement-${releaseVersion}.tgz",
-                            "target": "npm/myapp-npm/nodejs-usermanagement-${releaseVersion}.tgz"
+                            "target": "myapp-npm-local/nodejs-usermanagement-${releaseVersion}.tgz"
                             }
                         ]
                         }"""
@@ -136,6 +136,7 @@ def call(body){
                 stage("Versioning - updating to new release"){
                     sh """
                     sed -i 's/"version": "${releaseVersion}"/"version": "${newPomVersion}"/g' package.json
+                    cat package.json
                     """
                 }
 
