@@ -99,24 +99,10 @@ def call(body){
 
                 stage("Versioning - creating the package"){
                     sh "npm pack"
-                    //sh "mv nodejs-usermanagement-1.0.0.tgz nodejs-usermanagement-${releaseVersion}.tgz"
                 }
 
                 stage("Build & push the artifacts to Jfrog"){
                     withCredentials([string(credentialsId: 'jfrog', variable: 'jfrogCred')]) {
-                        //sh "${mavenHome} -f ${config.targetPom} -gs ${mavenSettings} clean install -B org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy -DaltReleaseDeploymentRepository=Jfrog::default::https://shubhamdevopscloud.jfrog.io/artifactory/myapp-releases/ -DaltSnapshotDeploymentRepository=Jfrog::default::https://shubhamdevopscloud.jfrog.io/artifactory/myapp-snapshots/"
-                        
-                        // def server = Artifactory.server 'jfrog'
-                        // def rtMaven = Artifactory.newMavenBuild()
-                        // rtMaven.deployer server: server, releaseRepo: 'myapp-releases', snapshotRepo: 'myapp-snapshots'
-                        // //env.MAVEN_HOME = "/opt/maven"
-
-                        // def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean install -gs /opt/maven/conf/settings.xml' 
-                        // server.publishBuildInfo buildInfo
-
-                        //sh "npm publish"
-
-
                         def uploadSpec = """{
                         "files": [
                             {
@@ -150,12 +136,7 @@ def call(body){
                         sh "docker login -u ${username} -p ${password}"
                         sh "docker push ${imageTag}"
                     }
-                    // withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS', secretKeyVariable:'AWS_SECRET_ACCESS_KEY')]) {
-                    //     def AWS_DEFAULT_REGION = "us-east-1"
-                    //     sh "aws --version"
-                    //     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 182555641266.dkr.ecr.us-east-1.amazonaws.com"
-                    //     sh "docker push ${imageTag}"
-                    // }
+
                 }
 
                 stage("Update repo"){
