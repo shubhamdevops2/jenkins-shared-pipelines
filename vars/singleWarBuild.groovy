@@ -97,9 +97,10 @@ def call(body){
                     }
                 }
 
-                // stage("Versioning - remove Snapshot"){
-                //     sh "${mavenHome} -f ${config.targetPom} -gs ${mavenSettings} org.codehaus.mojo:versions-maven-plugin:2.3:set -DnewVersion='${releaseVersion}' -B"
-                // }
+                stage("Versioning - Update version before pushing to jfrog"){
+                    sh "npm pack"
+                    sh "mv nodejs-usermanagement-1.0.0.tgz nodejs-usermanagement-${releaseVersion}.tgz"
+                }
 
                 stage("Build & push the artifacts to Jfrog"){
                     withCredentials([string(credentialsId: 'jfrog', variable: 'jfrogCred')]) {
@@ -113,12 +114,27 @@ def call(body){
                         // def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean install -gs /opt/maven/conf/settings.xml' 
                         // server.publishBuildInfo buildInfo
 
-                        sh "npm publish"
+                        //sh "npm publish"
+
+
+                        def uploadSpec = """{
+                        "files": [
+                            {
+                            "pattern": "nodejs-usermanagement-${releaseVersion}.tgz",
+                            "target": "npm/myapp-npm/nodejs-usermanagement-${releaseVersion}.tgz"
+                            }
+                        ]
+                        }"""
+                        def server = Artifactory.server 'jfrog'
+                        def buildInfo = Artifactory.newBuildInfo()
+                        buildInfo.env.collect()
+                        server.upload spec: uploadSpec, buildInfo: buildInfo
+                        server.publishBuildInfo buildInfo
                     }
                 }
 
                 stage("Versioning - updating to new release"){
-                    sh "${mavenHome} -f ${config.targetPom} -gs ${mavenSettings} org.codehaus.mojo:versions-maven-plugin:2.3:set -DnewVersion='${newPomVersion}' -B"
+                    sh "mv nodejs-usermanagement-${releaseVersion}.tgz nodejs-usermanagement-${newPomVersion}.tgz"
                 }
 
                 stage("Build Docker Image"){
