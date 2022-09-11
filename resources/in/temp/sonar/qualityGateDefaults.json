@@ -1,0 +1,24 @@
+{
+    "qualityGates": [
+        {
+            "qualityGateID": "AX-hWYjHxlfPm-SEg9y3",
+            "qualityGateName": "Sonar way",
+            "components": {
+                "enforced": [],
+                "advisory": [ 
+                    "default" 
+                ]
+            }
+        },
+        {
+            "qualityGateID": "AX-hN4ByxlfPm-SEg4cT",
+            "qualityGateName": "1. MyApp Quality Gate (90% Coverage)",
+            "components": {
+                "enforced": [],
+                "advisory": [ 
+                    "myapp" 
+                ]
+            }
+        }
+    ]
+}
