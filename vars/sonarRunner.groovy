@@ -39,7 +39,7 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                     def artifactId = node.version
 
                     sonarKey = artifactId + ":" + "main"
-                    sonarProjectName = artifactId + " " + "main"
+                    sonarProjectName = node.name + " " +artifactId + " " + "main"
                     def sonarName = node.name
 
                     def sonarQualityGateId = sonarQubeDetails.getProjectGate(artifactId)
