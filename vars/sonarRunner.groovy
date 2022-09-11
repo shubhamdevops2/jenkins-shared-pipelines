@@ -3,6 +3,7 @@ import org.common.SonarQubeDetails
 
 void call(String mavenHome, String targetFile,String releaseVersion){
     def sonarKey, sonarProps, sonarResult, sonarProjectName,sonarVersion
+    def scannerHome
 
     sonarVersion = releaseVersion
     def sonarExtURL = "http://192.168.0.106:9000"
