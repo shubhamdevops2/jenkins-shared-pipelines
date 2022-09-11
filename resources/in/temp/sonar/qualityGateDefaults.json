@@ -16,7 +16,7 @@
             "components": {
                 "enforced": [],
                 "advisory": [ 
-                    "myapp" 
+                    "1.0.0" 
                 ]
             }
         }

@@ -9,8 +9,8 @@ def call(body){
     def doBuild = true
     def registryName = 'shubham1769/'
     def originalversion, releaseVersion, newPomVersion, sonarProps, sonarResult
-    def mavenHome = "/opt/maven/bin/mvn"
-    def mavenSettings = "/opt/maven/conf/settings.xml"
+    def npmHome = "/usr/share/npm"
+    //def mavenSettings = "/opt/maven/conf/settings.xml"
 
  
     node("test"){
@@ -32,7 +32,7 @@ def call(body){
                 extensions: [[$class: 'CloneOption', depth: 1, noTags: false, reference: '', shallow: true, timeout: 15]],
                 userRemoteConfigs: scm.userRemoteConfigs
             ])
-            sh "git checkout "		     
+            //sh "git checkout "		     
         }
 
         //This stage is to stop rebuild of compenents if nothing has changes in the repo
@@ -72,7 +72,7 @@ def call(body){
                 //call versioning and work on next maven version
                 stage("Get Version Details"){
                     def versionArray
-                    versionArray = versioning(true, ecrRepoName, config.targetPom, branch)
+                    versionArray = versioning(true, ecrRepoName, config.targetFile, branch)
                     
                     originalversion = versionArray[0]
                     releaseVersion = versionArray[1]
@@ -82,7 +82,7 @@ def call(body){
                 }
 
                 stage("SONAR : This will trigger next 4 stages"){
-                    sonarProps = sonarRunner(mavenHome, mavenSettings, config.targetPom)
+                    sonarProps = sonarRunner(npmHome, config.targetFile,releaseVersion)
                     sonarResult = sonarProps['sonarResult']
                 }
 

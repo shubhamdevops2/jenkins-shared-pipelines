@@ -1,8 +1,10 @@
 import groovy.json.JsonBuilder;
 import org.common.SonarQubeDetails
 
-void call(String mavenHome, String mavenSettings, String targetPom){
-    def sonarKey, sonarProps, sonarResult, sonarProjectName
+void call(String mavenHome, String targetFile,String realeaseVersion){
+    def sonarKey, sonarProps, sonarResult, sonarProjectName,sonarVersion
+
+    sonarVersion = releaseVersion
     def sonarExtURL = "http://192.168.0.106:9000"
 
     node("test"){
@@ -33,16 +35,15 @@ void call(String mavenHome, String mavenSettings, String targetPom){
             
             if(doSetup){
                 withCredentials([string(credentialsId: 'sonarqube', variable: 'sonarCred')]) {
-                    def pom = readMavenPom file: targetPom
-                    def artifactId = pom.artifactId
-                    def groupId = pom.groupId 
+                    def node = readJSON file: targetFile
+                    def artifactId = node.version
 
-                    sonarKey = groupId + ":" + artifactId + ":" + "main"
+                    sonarKey = artifactId + ":" + "main"
                     sonarProjectName = artifactId + " " + "main"
-                    def sonarName = pom.name
+                    def sonarName = node.name
 
                     def sonarQualityGateId = sonarQubeDetails.getProjectGate(artifactId)
-                    def defaultQualityGateId = sonarQubeDetails.getProjectGate("default")
+                    //def defaultQualityGateId = sonarQubeDetails.getProjectGate("default")
                     def url
                     Boolean newProject = false
 
@@ -95,9 +96,20 @@ void call(String mavenHome, String mavenSettings, String targetPom){
 
         try{
             stage("Sonar: Analysis"){
+                environment {
+                    scannerHome = tool 'sonarqube'
+                }
                 withSonarQubeEnv('sonarqube'){
-                    sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean org.jacoco:jacoco-maven-plugin:prepare-agent install org.jacoco:jacoco-maven-plugin:report-aggregate org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.8.0.2131:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
+                    //sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean org.jacoco:jacoco-maven-plugin:prepare-agent install org.jacoco:jacoco-maven-plugin:report-aggregate org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.8.0.2131:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
                     //sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean install sonar:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
+
+                    sh """
+                        ${scannerHome}/bin/sonar-scanner \
+                        -D sonar.projectKey=${sonarKey} \
+                        -D sonar.projectName=${sonarProjectName} \
+                        -D sonar.projectVersion=${sonarVersion} \
+                    """
+
                 }
             }
 
