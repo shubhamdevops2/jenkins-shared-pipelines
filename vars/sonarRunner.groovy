@@ -154,6 +154,7 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                     url = new URL(sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + analysisId)
                     sh "curl -u ${sonarCred}: ${url} -o qualityGate.json"
                     def qgProps = readJSON file: "qualityGate.json"
+                    sh "cat qualityGate.json"
                     def qualitygate = qgProps['projectStatus']['status']
 
                     if(qualitygate == "OK" || qualitygate == "WARN"){
