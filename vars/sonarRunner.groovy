@@ -107,7 +107,7 @@ void call(String mavenHome, String targetFile,String releaseVersion){
 
 
                     sh """
-                        ${scannerHome}/bin/sonar-scanner \
+                        ${scannerHome}sonar-scanner \
                         -D sonar.projectKey=${sonarKey} \
                         -D sonar.projectName=${sonarProjectName} \
                         -D sonar.projectVersion=${sonarVersion} \
