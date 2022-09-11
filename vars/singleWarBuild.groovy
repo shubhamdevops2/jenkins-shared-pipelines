@@ -86,7 +86,7 @@ def call(body){
                     sonarResult = sonarProps['sonarResult']
                 }
 
-                stage("Maven Results aggregation"){
+                stage("Node Results aggregation"){
                     echo "Sonar Result: ${sonarResult}"
 
                     if( sonarResult == "failure" ){
@@ -97,21 +97,23 @@ def call(body){
                     }
                 }
 
-                stage("Versioning - remove Snapshot"){
-                    sh "${mavenHome} -f ${config.targetPom} -gs ${mavenSettings} org.codehaus.mojo:versions-maven-plugin:2.3:set -DnewVersion='${releaseVersion}' -B"
-                }
+                // stage("Versioning - remove Snapshot"){
+                //     sh "${mavenHome} -f ${config.targetPom} -gs ${mavenSettings} org.codehaus.mojo:versions-maven-plugin:2.3:set -DnewVersion='${releaseVersion}' -B"
+                // }
 
                 stage("Build & push the artifacts to Jfrog"){
                     withCredentials([string(credentialsId: 'jfrog', variable: 'jfrogCred')]) {
                         //sh "${mavenHome} -f ${config.targetPom} -gs ${mavenSettings} clean install -B org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy -DaltReleaseDeploymentRepository=Jfrog::default::https://shubhamdevopscloud.jfrog.io/artifactory/myapp-releases/ -DaltSnapshotDeploymentRepository=Jfrog::default::https://shubhamdevopscloud.jfrog.io/artifactory/myapp-snapshots/"
                         
-                        def server = Artifactory.server 'jfrog'
-                        def rtMaven = Artifactory.newMavenBuild()
-                        rtMaven.deployer server: server, releaseRepo: 'myapp-releases', snapshotRepo: 'myapp-snapshots'
-                        env.MAVEN_HOME = "/opt/maven"
+                        // def server = Artifactory.server 'jfrog'
+                        // def rtMaven = Artifactory.newMavenBuild()
+                        // rtMaven.deployer server: server, releaseRepo: 'myapp-releases', snapshotRepo: 'myapp-snapshots'
+                        // //env.MAVEN_HOME = "/opt/maven"
 
-                        def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean install -gs /opt/maven/conf/settings.xml' 
-                        server.publishBuildInfo buildInfo
+                        // def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean install -gs /opt/maven/conf/settings.xml' 
+                        // server.publishBuildInfo buildInfo
+
+                        sh "npm publish"
                     }
                 }
 
