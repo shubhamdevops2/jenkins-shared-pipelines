@@ -1,7 +1,7 @@
 import groovy.json.JsonBuilder;
 import org.common.SonarQubeDetails
 
-void call(String mavenHome, String targetFile,String realeaseVersion){
+void call(String mavenHome, String targetFile,String releaseVersion){
     def sonarKey, sonarProps, sonarResult, sonarProjectName,sonarVersion
 
     sonarVersion = releaseVersion
