@@ -97,9 +97,9 @@ def call(body){
                     }
                 }
 
-                stage("Versioning - Update version before pushing to jfrog"){
+                stage("Versioning - creating the package"){
                     sh "npm pack"
-                    sh "mv nodejs-usermanagement-1.0.0.tgz nodejs-usermanagement-${releaseVersion}.tgz"
+                    //sh "mv nodejs-usermanagement-1.0.0.tgz nodejs-usermanagement-${releaseVersion}.tgz"
                 }
 
                 stage("Build & push the artifacts to Jfrog"){
@@ -134,7 +134,9 @@ def call(body){
                 }
 
                 stage("Versioning - updating to new release"){
-                    sh "mv nodejs-usermanagement-${releaseVersion}.tgz nodejs-usermanagement-${newPomVersion}.tgz"
+                    sh """
+                    sed -i 's/"version": "${releaseVersion}"/"version": "${newPomVersion}"/g' package.json
+                    """
                 }
 
                 stage("Build Docker Image"){
