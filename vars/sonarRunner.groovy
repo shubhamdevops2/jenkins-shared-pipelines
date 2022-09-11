@@ -105,9 +105,9 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                     //sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean install sonar:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
 
 
-
+                    sh "${scannerHome}"
                     sh """
-                        ${scannerHome}sonar-scanner \
+                        ${scannerHome}/sonar-scanner \
                         -D sonar.projectKey=${sonarKey} \
                         -D sonar.projectName=${sonarProjectName} \
                         -D sonar.projectVersion=${sonarVersion} \
