@@ -132,7 +132,7 @@ def call(body){
                 }
 
                 stage("Publish docker image"){
-                    withCredentials([usernamePassword(credentialsId: 'docker credentials', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker-cred-shubhamdevops2', passwordVariable: 'password', usernameVariable: 'username')]) {
                         sh "docker login -u ${username} -p ${password}"
                         sh "docker push ${imageTag}"
                     }
