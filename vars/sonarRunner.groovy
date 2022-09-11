@@ -105,7 +105,7 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                     //sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean install sonar:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
 
 
-                    //sh "${scannerHome}"
+                    sh "npm run coverage-lcov"
                     sh """
                         ${scannerHome}/sonar-scanner \
                         -D sonar.projectKey=${sonarKey} \
