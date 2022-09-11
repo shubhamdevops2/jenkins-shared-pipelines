@@ -114,7 +114,7 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                         -D sonar.sources=. \
                         -D sonar.exclusions=*/node-modules/** \
                         -D sonar.scanner.dumpToFile=file.txt
-                        -D sonar.working.directory=.
+                        
                     """
 
                 }
