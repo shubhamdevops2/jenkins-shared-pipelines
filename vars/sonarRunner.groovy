@@ -3,7 +3,7 @@ import org.common.SonarQubeDetails
 
 void call(String mavenHome, String targetFile,String releaseVersion){
     def sonarKey, sonarProps, sonarResult, sonarProjectName,sonarVersion
-    def scannerHome
+    def scannerHome = "/opt/sonar-scanner/bin"
 
     sonarVersion = releaseVersion
     def sonarExtURL = "http://192.168.0.106:9000"
@@ -97,9 +97,9 @@ void call(String mavenHome, String targetFile,String releaseVersion){
 
         try{
             stage("Sonar: Analysis"){
-                environment {
-                    scannerHome = tool 'sonarqube'
-                }
+                // environment {
+                //     scannerHome = tool 'sonarqube'
+                // }
                 withSonarQubeEnv('sonarqube'){
                     //sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean org.jacoco:jacoco-maven-plugin:prepare-agent install org.jacoco:jacoco-maven-plugin:report-aggregate org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.8.0.2131:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
                     //sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean install sonar:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
@@ -107,7 +107,7 @@ void call(String mavenHome, String targetFile,String releaseVersion){
 
                     //sh "${scannerHome}"
                     sh """
-                        sonar-scanner \
+                        ${scannerHome}/sonar-scanner \
                         -D sonar.projectKey=${sonarKey} \
                         -D sonar.projectName=${sonarProjectName} \
                         -D sonar.projectVersion=${sonarVersion} \
