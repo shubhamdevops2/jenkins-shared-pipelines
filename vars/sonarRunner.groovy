@@ -126,8 +126,8 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                 println currentPath*/
 
                 //Get the report task written by sonar with taskID
-                def props = readProperties file: 'target/sonar/report-task.txt'
-                sh "cat target/sonar/report-task.txt"
+                def props = readProperties file: '.scannerwork/report-task.txt'
+                sh "cat .scannerwork/report-task.txt"
                 def sonarServerUrl = props['serverUrl']
                 def ceTaskUrl = props['ceTaskUrl']
                 def ceTask
