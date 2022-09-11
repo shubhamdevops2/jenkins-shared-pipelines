@@ -12,7 +12,7 @@ void call(Boolean ecrEnabled, String ecrRepoName, String targetFile, String bran
 
     echo "build version is: $buildVersion"
     buildVersion = buildVersion.toInteger() + 1
-    def newPomVersion = "${majorVersion}.${minorVersion}.${buildVersion}-SNAPSHOT"
+    def newPomVersion = "${majorVersion}.${minorVersion}.${buildVersion}"
 
     def artifactId = ecrRepoName.toLowerCase()
     def timestamp = new Date().format("yyyy-MM-dd-HH-mm-ss", TimeZone.getTimeZone('IST'))
