@@ -135,6 +135,7 @@ def call(body){
                     withCredentials([usernamePassword(credentialsId: 'docker-cred-shubhamdevops2', passwordVariable: 'password', usernameVariable: 'username')]) {
                         sh "docker login -u ${username} -p ${password}"
                         sh "docker push ${imageTag}"
+                        sh "docker rmi ${imageTag}"
                     }
 
                 }
