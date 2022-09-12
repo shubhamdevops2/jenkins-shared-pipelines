@@ -135,10 +135,14 @@ def call(body){
                     withCredentials([usernamePassword(credentialsId: 'docker-cred-shubhamdevops2', passwordVariable: 'password', usernameVariable: 'username')]) {
                         sh "docker login -u ${username} -p ${password}"
                         sh "docker push ${imageTag}"
-                        sh "docker rmi ${imageTag}"
-                        sh "rm nodejs-usermanagement-${releaseVersion}.tgz"
                     }
 
+                }
+
+                stage("deleting the artifactory and docker image to keep the space")
+                {
+                    sh "docker rmi ${imageTag}"
+                    sh "rm nodejs-usermanagement-${releaseVersion}.tgz"
                 }
 
                 stage("Update repo"){
