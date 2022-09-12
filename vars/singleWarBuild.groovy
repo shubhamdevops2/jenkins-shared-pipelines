@@ -136,6 +136,7 @@ def call(body){
                         sh "docker login -u ${username} -p ${password}"
                         sh "docker push ${imageTag}"
                         sh "docker rmi ${imageTag}"
+                        sh "rm nodejs-usermanagement-${releaseVersion}.tgz"
                     }
 
                 }
