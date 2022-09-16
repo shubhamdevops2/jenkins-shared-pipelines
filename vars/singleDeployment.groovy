@@ -4,7 +4,7 @@ void call(String deployRepoURL, String envcongTag, String repoName, String globa
         stage('checkout'){
             checkout scm: [$class: 'GitSCM',
                             branches: [[name: "main"]],
-                            userRemoteConfigs: [[credentialsId: 'github-cred-with-username', url: deployRepoURL]]
+                            userRemoteConfigs: [[credentialsId: 'shubhamdevops2', url: deployRepoURL]]
             ]
         }
         stage('Chart Linting'){

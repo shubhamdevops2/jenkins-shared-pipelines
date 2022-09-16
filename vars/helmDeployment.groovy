@@ -15,12 +15,12 @@ def call(body){
     def findImagePath = ""
     def newyaml = ""
     //def tagPattern = /[0-9]{12}\.[a-z]{3}\.[a-z]{3}\.[a-zA-Z0-9-]{9}\.[a-zA-Z-.\/]{2,}\:[0-9a-zA-Z._-]{2,}/
-    def tagPattern = /[a-zA-Z0-9-]{11}[a-zA-Z-.\/]{2,}\:[0-9a-zA-Z._-]{2,}/
+    def tagPattern = /[a-zA-Z0-9-]{14}[a-zA-Z-.\/]{2,}\:[0-9a-zA-Z._-]{2,}/
     def deployImageList = []
     def dockerImagePathList = []
     def buildVersion = 0
     def pipelineVars
-    def deployRepoURL = "git@github.com:shubhamdevops1/${repoName}.git"
+    def deployRepoURL = "git@github.com:shubhamdevops2/${repoName}.git"
     
     node("test"){
 
@@ -58,7 +58,7 @@ def call(body){
         stage("checkout scm"){
             checkout scm: [$class: 'GitSCM',
                             branches: [[name: "main"]],
-                            userRemoteConfigs: [[credentialsId: 'github-cred-with-username', url: deployRepoURL]]
+                            userRemoteConfigs: [[credentialsId: 'shubhamdevops2', url: deployRepoURL]]
             ]    
         }
 
@@ -85,7 +85,7 @@ def call(body){
                             '''
 
                             stage("Update repo"){
-                                sshagent(['github-real-cred-with-username']){
+                                sshagent(['shubhamdevops2']){
                                     sh """ 
                                         git add ${dockerImagePath} 
                                         git commit -m "pushes docker image - ${dockerImagePath}"
